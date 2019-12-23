@@ -49,9 +49,11 @@ def main():
     tflib.init_tf()
 
     # Load pre-trained network.
-    url = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ' # karras2019stylegan-ffhq-1024x1024.pkl
-    with dnnlib.util.open_url(url, cache_dir=config.cache_dir) as f:
-        _G, _D, Gs = pickle.load(f)
+    # url = 'https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ' # karras2019stylegan-ffhq-1024x1024.pkl
+
+    # with dnnlib.util.open_url(url, cache_dir=config.cache_dir) as f:
+    f = open('./karras2019stylegan-ffhq-1024x1024.pkl', 'b')
+    _G, _D, Gs = pickle.load(f)
         # _G = Instantaneous snapshot of the generator. Mainly useful for resuming a previous training run.
         # _D = Instantaneous snapshot of the discriminator. Mainly useful for resuming a previous training run.
         # Gs = Long-term average of the generator. Yields higher-quality results than the instantaneous snapshot.
