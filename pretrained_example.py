@@ -63,6 +63,8 @@ def main():
     # Print network details.
     Gs.print_layers()
 
+    image_to_latent = {}
+
     def make_image(i):
 
         # Pick latent vector.
@@ -89,11 +91,14 @@ def main():
         score = predict(pil_image, model)
         png_filename = os.path.join(config.result_dir, 'example_{}_{}.png'.format(i, score))
         pil_image.save(png_filename)
-
+        latent_to_image[png_filename] = latents
 
 
     for i in range(10):
         make_image(i)
+
+    with open('image_to_latent.json', 'w') as f:
+        json.dump(image_to_latent, f)
 
 
 if __name__ == "__main__":
