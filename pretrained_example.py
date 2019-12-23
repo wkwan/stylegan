@@ -43,8 +43,8 @@ def predict(image, model):
     with torch.no_grad():
         preds = model(image)
     score = preds.detach().numpy().item()
-    print('Popularity score: ' + str(round(score, 2)))
-    return round(score, 2)
+    print('Popularity score: ' + str(round(score, 10)))
+    return str(round(score, 10))
 
 def main():
     # Initialize TensorFlow.
@@ -75,7 +75,6 @@ def main():
 
         # Save image.
         os.makedirs(config.result_dir, exist_ok=True)
-        png_filename = os.path.join(config.result_dir, 'example_{}.png'.format(i))
 
 
         pil_image = PIL.Image.fromarray(images[0], 'RGB')
@@ -88,7 +87,9 @@ def main():
         model.load_state_dict(torch.load('model/model-resnet50.pth', map_location=torch.device('cpu')))
         model.eval()
 
-        predict(pil_image, model)
+        score = predict(pil_image, model)
+        png_filename = os.path.join(config.result_dir, 'example_{}_{}.png'.format(i, score))
+
 
     for i in range(10):
         make_image(i)
