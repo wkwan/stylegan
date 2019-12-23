@@ -78,7 +78,6 @@ def main():
 
 
         pil_image = PIL.Image.fromarray(images[0], 'RGB')
-        pil_image.save(png_filename)
 
         # Instagram popularity prediction
         model = torchvision.models.resnet50()
@@ -89,6 +88,8 @@ def main():
 
         score = predict(pil_image, model)
         png_filename = os.path.join(config.result_dir, 'example_{}_{}.png'.format(i, score))
+        pil_image.save(png_filename)
+
 
 
     for i in range(10):
