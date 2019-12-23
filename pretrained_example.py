@@ -91,7 +91,7 @@ def main():
         score = predict(pil_image, model)
         png_filename = os.path.join(config.result_dir, 'example_{}_{}.png'.format(i, score))
         pil_image.save(png_filename)
-        image_to_latent[png_filename] = latents
+        image_to_latent[png_filename] = latents.tolist()
 
 
     for i in range(3):
