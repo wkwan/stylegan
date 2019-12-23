@@ -22,6 +22,8 @@ import torchvision.transforms as transforms
 from PIL import Image
 import json
 
+import seaborn as sns; sns.set()
+
 import cv2
 
 def prepare_image(image):
@@ -61,30 +63,35 @@ def main():
     # Print network details.
     Gs.print_layers()
 
-    # Pick latent vector.
-    rnd = np.random.RandomState(6)
-    latents = rnd.randn(1, Gs.input_shape[1])
+    def make_image(i):
 
-    # Generate image.
-    fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
-    images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
+        # Pick latent vector.
+        rnd = np.random.RandomState(6)
+        latents = rnd.randn(1, Gs.input_shape[1])
 
-    # Save image.
-    os.makedirs(config.result_dir, exist_ok=True)
-    png_filename = os.path.join(config.result_dir, 'example.png')
-    pil_image = PIL.Image.fromarray(images[0], 'RGB')
-    print("IMAGE SIZE ----")
-    print(pil_image.size)
-    pil_image.save(png_filename)
+        # Generate image.
+        fmt = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+        images = Gs.run(latents, None, truncation_psi=0.7, randomize_noise=True, output_transform=fmt)
 
-    # Instagram popularity prediction
-    model = torchvision.models.resnet50()
-    # model.avgpool = nn.AdaptiveAvgPool2d(1) # for any size of the input
-    model.fc = torch.nn.Linear(in_features=2048, out_features=1)
-    model.load_state_dict(torch.load('model/model-resnet50.pth', map_location=torch.device('cpu')))
-    model.eval()
+        # Save image.
+        os.makedirs(config.result_dir, exist_ok=True)
+        png_filename = os.path.join(config.result_dir, 'example_{}.png'.format(i))
 
-    predict(pil_image, model)
+
+        pil_image = PIL.Image.fromarray(images[0], 'RGB')
+        pil_image.save(png_filename)
+
+        # Instagram popularity prediction
+        model = torchvision.models.resnet50()
+        # model.avgpool = nn.AdaptiveAvgPool2d(1) # for any size of the input
+        model.fc = torch.nn.Linear(in_features=2048, out_features=1)
+        model.load_state_dict(torch.load('model/model-resnet50.pth', map_location=torch.device('cpu')))
+        model.eval()
+
+        predict(pil_image, model)
+
+    for i in range(10):
+        make_image(i)
 
 
 if __name__ == "__main__":
