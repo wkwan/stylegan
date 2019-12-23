@@ -66,7 +66,7 @@ def main():
     def make_image(i):
 
         # Pick latent vector.
-        rnd = np.random.RandomState(6)
+        rnd = np.random.RandomState()
         latents = rnd.randn(1, Gs.input_shape[1])
 
         # Generate image.
