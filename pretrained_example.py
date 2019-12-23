@@ -94,10 +94,28 @@ def main():
         image_to_latent[png_filename] = latents
 
 
-    for i in range(10):
+    for i in range(3):
         make_image(i)
 
-    with open('image_to_latent.json', 'w') as f:
+    with open('image_to_latent_0.json', 'w') as f:
+        json.dump(image_to_latent, f)
+
+    for i in range(3, 6):
+        make_image(i)
+
+    with open('image_to_latent_1.json', 'w') as f:
+        json.dump(image_to_latent, f)
+
+    for i in range(6, 9):
+        make_image(i)
+
+    with open('image_to_latent_2.json', 'w') as f:
+        json.dump(image_to_latent, f)
+
+    for i in range(9, 12):
+        make_image(i)
+
+    with open('image_to_latent_3.json', 'w') as f:
         json.dump(image_to_latent, f)
 
 
